@@ -1,5 +1,18 @@
 Rails.application.routes.draw do
   root to: 'products#index'
+
+  namespace :api do
+    namespace :v1 do
+      resources :products do
+        resources :comments, only: [:create]
+      end
+
+      resources :users, only: [:create]
+
+      post '/login',    to: 'sessions#create'
+      delete '/signout', to: 'sessions#destroy', as: 'session'
+    end
+  end
   
   get '/signup',     to: 'users#new'
   get '/login',     to: 'sessions#new'
@@ -7,7 +20,6 @@ Rails.application.routes.draw do
   delete '/signout', to: 'sessions#destroy', as: 'session'
 
   resources :users, only: [:create]
-  # get 'users/new',          to: 'users#new', as: 'new'
 
   resources :products do
     resources :comments, only: [:create]

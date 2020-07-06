@@ -11,12 +11,12 @@
   </head>
 
   <body>
-    <%= render partial: 'shared/header' %>
-    
-    <%= render partial: 'shared/messages' %>
-    
-    <br><%= yield %>
-      
-    <%= render partial: 'shared/footer' %>
+    <div id="root">
+      <br><%= yield %>
+    </div>
+
+    <%#= render partial:  'shared/header' %>
+    <%#= render partial: 'shared/messages' %>      
+    <%#= render partial: 'shared/footer' %>
   </body>
 </html>
