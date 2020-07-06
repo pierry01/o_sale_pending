@@ -8,6 +8,7 @@ import ProductList from './ProductsContainer'
 const App = () => (
   <div>
     <Header />
+    <br/>
     <Jumbotron />
     <ProductList />
     <Footer />
