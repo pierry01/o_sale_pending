@@ -9,17 +9,16 @@ import NewProductForm from '../components/products/NewProductForm'
 
 class App extends Component {
   render() {
-    return(
+    return (
       <BrowserRouter>
         <React.Fragment>
           <Header />
           <br />
-    
+
           <Switch >
             <Route exact path='/' component={ProductList} />
             <Route path='/products/:id' component={ProductDetail} />
-            <Route path='/newProduct' component={NewProductForm} />
-    
+
             <Route render={() => (
               <div className="container">
                 <div className="row">
@@ -33,7 +32,7 @@ class App extends Component {
               </div>
             )} />
           </Switch>
-    
+
           <Footer />
         </React.Fragment>
       </BrowserRouter>

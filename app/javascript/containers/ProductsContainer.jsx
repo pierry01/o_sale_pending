@@ -3,6 +3,7 @@ import axios from 'axios'
 
 import Product from '../components/products/Product'
 import Jumbotron from '../components/products/Jumbotron'
+import NewProductForm from '../components/products/NewProductForm'
 
 class ProductList extends React.Component {
   state = {
@@ -23,6 +24,20 @@ class ProductList extends React.Component {
       .catch(error => console.log(error.response.data))
   }
 
+  handleProductSubmit = (data) => {
+    const newProduct = {
+      product: { ...data }
+    }
+
+    axios
+      .post('/api/v1/products.json', newProduct)
+      .then(response => {
+        const newProducts = [...this.state.products, response.data.product]
+        this.setState({ products: newProducts })
+      })
+      .catch(error => console.log(error))
+  }
+
   render() {
     const { products } = this.state
     const productList = products.map(
@@ -32,6 +47,8 @@ class ProductList extends React.Component {
     return (
       <React.Fragment>
         <Jumbotron />
+
+        <NewProductForm onSubmit={this.handleProductSubmit} />
 
         <div className="container" >
           <div className="row">

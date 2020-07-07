@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 class NewProductForm extends React.Component {
   state = {
@@ -11,6 +12,18 @@ class NewProductForm extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault()
+
+    const { name, description, price, quantity } = this.state
+    const newProduct = { name, description, price, quantity }
+
+    this.props.onSubmit(newProduct)
+
+    this.setState({
+      name: '',
+      description: '',
+      price: '',
+      quantity: ''
+    })
   }
 
   handleChange = (event) => {
@@ -29,25 +42,25 @@ class NewProductForm extends React.Component {
               <h1 className="text-center form-header-style pt-2 pb-3">
                 {title}
               </h1>
-  
+
               <div className="form-body-style px-5 pt-4">
                 <form className="form-horizontal" onSubmit={this.handleSubmit} >
                   <div className="form-group row">
                     <label htmlFor="name" className="col-md-3 col-form-label">
                       Name
                     </label>
-                    
+
                     <div className="col-md-9">
-                      <input 
-                        type="text" name="name" id="name" 
+                      <input
+                        type="text" name="name" id="name"
                         value={this.state.name}
                         onChange={this.handleChange}
-                        className="form-control" placeholder="Item name" 
-                        autoFocus={true} 
+                        className="form-control" placeholder="Item name"
+                        autoFocus={true}
                       />
                     </div>
                   </div>
-  
+
                   <div className="form-group row">
                     <label htmlFor="price" className="col-md-3 col-form-label">
                       Price
@@ -55,27 +68,41 @@ class NewProductForm extends React.Component {
 
                     <div className="col-md-9">
                       <input
-                        type="text" name="price" id="price" 
+                        type="text" name="price" id="price"
                         className="form-control" placeholder="Item price"
                         value={this.state.price} onChange={this.handleChange}
                       />
                     </div>
                   </div>
-  
+
+                  <div className="form-group row">
+                    <label htmlFor="quantity" className="col-md-3 col-form-label">
+                      Quantity
+                    </label>
+
+                    <div className="col-md-9">
+                      <input
+                        type="number" name="quantity" id="quantity"
+                        className="form-control" placeholder="Item quantity"
+                        value={this.state.quantity} onChange={this.handleChange}
+                      />
+                    </div>
+                  </div>
+
                   <div className="form-group row">
                     <label htmlFor="description" className="col-md-3 col-form-label">
                       Description
                     </label>
 
                     <div className="col-md-9">
-                      <textarea 
-                        name="description" id="description" className="form-control" 
+                      <textarea
+                        name="description" id="description" className="form-control"
                         placeholder="Item description here" rows="5"
                         value={this.state.description} onChange={this.handleChange}>
                       </textarea>
                     </div>
                   </div>
-  
+
                   <div className="form-group row">
                     <label htmlFor="image" className="col-md-3 col-form-label">
                       Image
@@ -85,7 +112,7 @@ class NewProductForm extends React.Component {
                       <input type="file" name="image" id="image" className="form-control" />
                     </div>
                   </div>
-  
+
                   <div className="form-group row">
                     <div className="col-md-9 offset-md-3">
                       <input type="submit" className="btn btn-outline-purple" value={buttonText} />
@@ -99,6 +126,10 @@ class NewProductForm extends React.Component {
       </div>
     )
   }
+}
+
+NewProductForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired
 }
 
 export default NewProductForm

@@ -1,7 +1,7 @@
 class ProductsController < ApplicationController
   before_action :require_signin, except: [:index, :show]
-  before_action :find_product, only: [:show, :edit, :update, :destroy]
-  before_action :require_owner, only: [:edit, :update, :destroy]
+  before_action :find_product, only: [:show, :update, :destroy]
+  before_action :require_owner, only: [:update, :destroy]
   
   def index
     @products = Product.all
@@ -10,10 +10,6 @@ class ProductsController < ApplicationController
   def show
     @comment = @product.comments.build
     @comments = @product.comments
-  end
-  
-  def new
-    @product = Product.new
   end
   
   def create
@@ -27,9 +23,6 @@ class ProductsController < ApplicationController
       flash.now[:alert] = 'Product has not been saved'
       render :new
     end
-  end
-  
-  def edit
   end
   
   def update
