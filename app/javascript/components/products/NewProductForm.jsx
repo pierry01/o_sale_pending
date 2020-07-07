@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import { inputClasses } from '../../shared/helpers'
+import ErrorMessages from '../shared/ErrorMessages'
 
 class NewProductForm extends React.Component {
   state = {
@@ -12,20 +13,45 @@ class NewProductForm extends React.Component {
     errors: {}
   }
 
+  componentDidUpdate = () => {
+    if (this.props.saved) {
+      this.setState({
+        name: '',
+        description: '',
+        price: '',
+        quantity: ''
+      })
+
+      this.props.onResetSaved()
+    }
+  }
+
   handleSubmit = (event) => {
     event.preventDefault()
 
-    const { name, description, price, quantity } = this.state
-    const newProduct = { name, description, price, quantity }
+    const fieldNames = ['name', 'description', 'price', 'quantity']
+    this.verifyAndSetFieldErrors(fieldNames)
 
-    this.props.onSubmit(newProduct)
+    if (Object.keys(this.state.errors).length === 0) {
+      const { name, description, price, quantity } = this.state
+      const newProduct = { name, description, price, quantity }
 
-    this.setState({
-      name: '',
-      description: '',
-      price: '',
-      quantity: ''
+      this.props.onSubmit(newProduct)
+    }
+  }
+
+  verifyAndSetFieldErrors = (fieldNames) => {
+    let errors = {}
+
+    fieldNames.forEach(fieldName => {
+      const fieldError = this.checkErrors(this.state, fieldName)
+      errors = Object.assign({}, errors, fieldError)
+      // errors = { ...errors, ...fieldError }
     })
+
+    if (Object.keys(errors).length > 0) {
+      this.setState({ errors })
+    }
   }
 
   handleChange = (event) => {
@@ -56,7 +82,7 @@ class NewProductForm extends React.Component {
 
       case 'quantity':
         if (parseInt(value, 10) > 0 || value.match(/^\d{1,}$/)) {
-          delete error['quantity']
+          delete errors['quantity']
         } break
 
       default:
@@ -109,6 +135,11 @@ class NewProductForm extends React.Component {
     return (
       <div className="container mb-4">
         <div className="row">
+          {
+            this.props.serverErrors.length > 0 &&
+            <ErrorMessages errors={this.props.serverErrors} />
+          }
+
           <div className="col-md-8 offset-md-2">
             <div className="card panel-div">
               <h1 className="text-center form-header-style pt-2 pb-3">
@@ -233,7 +264,10 @@ class NewProductForm extends React.Component {
 }
 
 NewProductForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
+  serverErrors: PropTypes.array.isRequired,
+  saved: PropTypes.bool.isRequired,
+  onResetSaved: PropTypes.func.isRequired
 }
 
 export default NewProductForm

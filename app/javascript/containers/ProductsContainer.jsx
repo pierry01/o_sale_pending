@@ -7,11 +7,22 @@ import NewProductForm from '../components/products/NewProductForm'
 
 class ProductList extends React.Component {
   state = {
-    products: []
+    products: [],
+    serverErrors: [],
+    saved: false,
+    isFormVisible: false
   }
 
   componentDidMount = () => {
     this.loadProductsFromServer()
+  }
+
+  shouldComponentUpdate = (nextProps, nextState) => {
+    if (this.state.serverErrors.length !== nextState.serverErrors.length) {
+      return true
+    }
+
+    return false
   }
 
   loadProductsFromServer = () => {
@@ -33,9 +44,37 @@ class ProductList extends React.Component {
       .post('/api/v1/products.json', newProduct)
       .then(response => {
         const newProducts = [...this.state.products, response.data.product]
-        this.setState({ products: newProducts })
+        this.setState({
+          products: newProducts,
+          serverErrors: [],
+          saved: true
+        })
       })
-      .catch(error => console.log(error))
+      .catch(error => {
+        const msgs = error.response.data
+        let currentErrors = [...this.state.serverErrors]
+
+        msgs.forEach((msg) => {
+          if (!currentErrors.includes(msg)) {
+            currentErrors = [...currentErrors, msg]
+          }
+        })
+
+        this.setState({ serverErrors: currentErrors })
+      })
+  }
+
+  handleButtonClick = () => {
+    this.setState({
+      isFormVisible: !this.state.isFormVisible
+    })
+  }
+
+  resetSaved = () => {
+    this.setState({
+      saved: false,
+      serverErrors: []
+    })
   }
 
   render() {
@@ -48,7 +87,29 @@ class ProductList extends React.Component {
       <React.Fragment>
         <Jumbotron />
 
-        <NewProductForm onSubmit={this.handleProductSubmit} />
+        <div className="container">
+          <div className="row">
+            <div className="col-md-12 mb-2">
+              <button
+                onClick={this.handleButtonClick}
+                className="btn btn-outline-purple btn-sm"
+              >
+                + New Product
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {
+          this.state.isFormVisible &&
+
+          <NewProductForm
+            onSubmit={this.handleProductSubmit}
+            serverErrors={this.state.serverErrors}
+            saved={this.state.saved}
+            onResetSaved={this.resetSaved}
+          />
+        }
 
         <div className="container" >
           <div className="row">

@@ -16,12 +16,11 @@ const Header = () => (
             Home <span className="sr-only">(current)</span>
           </Link>
         </li>
-        <li className="nav-item">
-          <Link to='/' className='nav-link'>New Product</Link>
-        </li>
+
         <li className="nav-item">
           <Link to='/' className='nav-link'>Sign In</Link>
         </li>
+        
         <li className="nav-item">
           <Link to='/' className='nav-link'>Sign Up</Link>
         </li>
