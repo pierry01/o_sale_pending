@@ -223,7 +223,7 @@ class NewProductForm extends React.Component {
 
                     <div className="col-md-9">
                       <textarea
-                        name="description" id="description"
+                        name="description" id="description" onBlur={this.handleBlur}
                         className={inputClasses('description', this.state)}
                         placeholder="Item description here" rows="5"
                         value={this.state.description} onChange={this.handleChange}>

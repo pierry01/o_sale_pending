@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
 import Header from '../components/shared/Header'
 import Footer from '../components/shared/Footer'
-import ProductList from './ProductsContainer'
+import ProductList from './ProductListContainer'
 import ProductDetail from './ProductDetailContainer'
 import NewProductForm from '../components/products/NewProductForm'
 
@@ -39,11 +39,5 @@ class App extends Component {
     )
   }
 }
-
-// const App = () => {
-//     return (
-//         <div>App Component</div>
-//     )
-// }
 
 export default App
