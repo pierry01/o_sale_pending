@@ -12,7 +12,7 @@ const Product = ({ product }) => (
             {product.price}
           </span>
 
-          <Link to={'/detail'}>{product.name}</Link>
+          <Link to={`/products/${product.id}`}>{product.name}</Link>
         </h5>
         <p className="card-text">
           {product.description}
